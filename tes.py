@@ -28,7 +28,7 @@ tengah=[0.0 for i in range (3)]
 
 #load weight_log dari input ke hidden
 with open('weight_log.txt', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='  ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         rbf_weight=list(read)
         for x in range(len(rbf_weight)):
@@ -39,7 +39,7 @@ with open('weight_log.txt', 'r+') as csvfile:
 
 #load weight_log dari hidden ke output
 with open('weight_log2.txt', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='  ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         v=list(read)
         for x in range(len(v)):
@@ -49,7 +49,7 @@ with open('weight_log2.txt', 'r+') as csvfile:
 
 #cari min max dari data set aslinya untuk normalisasi
 with open('normaldata.csv', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='     ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         content=list(read)
         for x in range(len(content)):
@@ -57,28 +57,29 @@ with open('normaldata.csv', 'r+') as csvfile:
                 content[x][y] = float(content[x][y])
 
 for x in range(len(content)):
-    for y in range(len(content[x])):
-        if content[x] > max[x]:
-            max[x]=content[x][y]
+    for y in range(len(content[x])-1):
+        if content[x][y] > max[y]:
+            max[y]=content[x][y]
 
-        if content[x] < min[x]:
-            min[x]=content[x][y]
+        if content[x][y] < min[y]:
+            min[y]=content[x][y]
 
 #load test case sekaligus normalisasi di array tes
 with open('tes.txt', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='  ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         tes=list(read)
         for x in range(len(tes)):
-            for y in range(len(tes[x])):
+            for y in range(len(tes[x])-1):
                 tes[x][y] = float(tes[x][y])
-                tes[x][y]=(tes[x][y]-min)/(max-min)
+                tes[x][y]=(tes[x][y]-min[y])/(max[y]-min[y])
                 print tes[x][y]
 
 #straight foward untuk menentukan kelas dari data tes
-for x in range (4):
+for x in range (len(tes)):
     for y in range(len(tes)-1):
-        tengah[x]=tengah[x]+tes[x][y]*rbf_weight[x][y]
+        #rumus straight forward mu salah yud, mustinya pake euclidean distance, soalnya kita pake sigmoid, bukan linear 
+        tengah[y]=tengah[y]+tes[x][y]*rbf_weight[x][y]
     #sigmoid dulu gan :)
         #print tes [x][y]
     #print tengah[x]
