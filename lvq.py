@@ -25,7 +25,7 @@ kelas2=0
 
 #menyimpan semua data set di dalam array
 with open('normaldata.csv', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='     ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         content=list(read)
         for x in range(len(content)):
@@ -94,7 +94,7 @@ while pilihan=="n":
     if pilihan=="y":
 #masukkan weight awal RBFNN dari output weight nya LVQ
         with open('weight_log.txt', 'r+') as csvfile:
-            read = csv.reader(csvfile, delimiter='  ')
+            read = csv.reader(csvfile, delimiter='\t')
             for row in read:
                 rbf_weight=list(read)
                 for x in range(len(rbf_weight)):
@@ -161,12 +161,12 @@ for x in range(len(content)):
 
 file = open("weight_log2.txt", "w+")
 file.write('\r\n')
-file.write(str(v[0][0])+'\t'+str(v[1][0])+'\t'+str(v[2][0])+'\t'+str(v[0][1])+'\t'+str(v[1][1])+'\t'+str(v[2][1]))
+file.write(str(v[0][0])+'\t'+str(v[1][0])+'\t'+str(v[2][0])+'\n'+str(v[0][1])+'\t'+str(v[1][1])+'\t'+str(v[2][1]))
 file.close()
 
 print "weight_log >> output lvq, bobot w untuk ke hidden layer"
 with open('weight_log.txt', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='  ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         rbf_weight=list(read)
         for x in range(len(rbf_weight)):
@@ -177,7 +177,7 @@ with open('weight_log.txt', 'r+') as csvfile:
 
 print "weight_log2 >> bobot v untuk ke output layer"
 with open('weight_log2.txt', 'r+') as csvfile:
-    read = csv.reader(csvfile, delimiter='  ')
+    read = csv.reader(csvfile, delimiter='\t')
     for row in read:
         v=list(read)
         for x in range(len(v)):
