@@ -1,4 +1,5 @@
 import csv
+import os
 from math import *
 
 input_lyr=[ 0.0 for i in range(8) ]
@@ -9,7 +10,7 @@ dist_b=0.0
 dist_c=0.0
 a=0 #iter buat distance
 winner=0.0
-lrate=0.05#lrate
+lrate=0.00075#lrate
 tau=0.3
 content = [[]]
 pilihan="Saya Ganteng"
@@ -23,14 +24,24 @@ kelas1=0
 kelas2=0
 
 
+with open('lrate.txt', 'r+') as csvfile:
+	read = csv.reader(csvfile, delimiter='\t')
+	for row in read:
+		content=list(read)
+		for x in range(len(content)):
+			for y in range(len(content[x])-1):
+				content[x][y] = float(content[x][y])
+lrate=content[0][0]
+content=[[]]
 #menyimpan semua data set di dalam array
 with open('normaldata.csv', 'r+') as csvfile:
 	read = csv.reader(csvfile, delimiter='\t')
 	for row in read:
 		content=list(read)
 		for x in range(len(content)):
-			for y in range(len(content[x])):
+			for y in range(len(content[x])-1):
 				content[x][y] = float(content[x][y])
+			content[x][7]=int(content[x][7])
 
 #inputkan baris 1 sebagai input pertama kali
 for x in range(1):
@@ -40,7 +51,14 @@ for x in range(1):
 #mulai lvq
 #salin dulu bobot nya dari data set yang ada
 weight=list(content)
-weight[x][y]=float(weight[x][y])
+if os.path.isfile('weight_log.txt'):
+	with open('weight_log.txt', 'r+') as csvfile:
+		read = csv.reader(csvfile, delimiter='\t')
+		for row in read:
+			weight=list(read)
+			for x in range(len(weight)):
+				for y in range(len(weight[x])):
+					weight[x][y] = float(weight[x][y])
 
 for x in range(len(content)):
 	#print weight node 1 dan 2
@@ -53,13 +71,17 @@ for x in range(len(content)):
 	for y in range(len(content[x])):
 		input_lyr[y]=content[x][y]
 	
-	for y in range(len(content[x])):
+	for y in range(len(content[x])-1):
 		dist_a += (input_lyr[y] - weight[0][y]) ** 2
 		dist_b += (input_lyr[y] - weight[1][y]) ** 2
 		dist_c += (input_lyr[y] - weight[2][y]) ** 2
 	dist_a=sqrt(dist_a)
 	dist_b=sqrt(dist_b)
 	dist_c=sqrt(dist_c)
+	print "Distance A "+str(dist_a)
+	print "Distance B "+str(dist_b)
+	print "Distance C "+str(dist_c)
+	print '\n'
 	#2 tentukan winner
 	winner=min(dist_a,dist_b,dist_c)
 	#update bobot
@@ -69,7 +91,7 @@ for x in range(len(content)):
 	elif winner==dist_b:
 		for b in range(7):
 			weight[1][b] = weight[1][b] + lrate * (input_lyr[b]-weight[1][b])
-	else:
+	elif winner==dist_c:
 		for b in range(7):
 			weight[2][b] = weight[2][b] + lrate * (input_lyr[b]-weight[2][b])
 	for b in range(7):
@@ -83,15 +105,15 @@ for x in range(len(content)):
 	print '\n'
 #def save(): untuk menyimpan outrput LVQ ke file digunakan sebagai start weight pada RBFNN
 file = open("weight_log.txt", "w+")
-file.write('\r\n')
+file.write('\n')
 file.write(str(weight[0][0])+'\t'+str(weight[0][1])+'\t'+str(weight[0][2])+'\t'+str(weight[0][3])+'\t'+str(weight[0][4])+'\t'+str(weight[0][5])+'\t'+str(weight[0][6]))
-file.write('\r\n')
+file.write('\n')
 file.write(str(weight[1][0])+'\t'+str(weight[1][1])+'\t'+str(weight[1][2])+'\t'+str(weight[1][3])+'\t'+str(weight[1][4])+'\t'+str(weight[1][5])+'\t'+str(weight[1][6]))
-file.write('\r\n')
+file.write('\n')
 file.write(str(weight[2][0])+'\t'+str(weight[2][1])+'\t'+str(weight[2][2])+'\t'+str(weight[2][3])+'\t'+str(weight[2][4])+'\t'+str(weight[2][5])+'\t'+str(weight[2][6]))
 file.close()
 
-
+'''
 #Start RBFNN
 pilihan="n"
 while pilihan=="n":
@@ -105,6 +127,7 @@ while pilihan=="n":
 				for x in range(len(rbf_weight)):
 					for y in range(len(rbf_weight[x])):
 						rbf_weight[x][y] = float(rbf_weight[x][y])
+
 for x in range(len(rbf_weight)):
 	for y in range(len(rbf_weight[x])):
 		print str(rbf_weight[x][y])
@@ -155,7 +178,7 @@ for x in range(len(content)):
 	elif content[x][7]==2:
 		kelas1=1
 		kelas2=0
-	else:
+	elif content[x][7]==3:
 		kelas1=1
 		kelas2=1
 
@@ -192,7 +215,12 @@ with open('weight_log2.txt', 'r+') as csvfile:
 				v[x][y] = float(v[x][y])
 				print v[x][y]
 		print "\n"
-'''
+
+
+
+
+
+
 		#pembulatan
 		if z1<0.5:
 				z1=0

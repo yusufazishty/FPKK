@@ -10,7 +10,7 @@ dist_b=0.0
 dist_c=0.0
 a=0 #iter buat distance
 winner=0.0
-lrate=0.1#lrate
+lrate=0.01#lrate
 tau=0.3
 content = [[]]
 pilihan="Saya Ganteng"
@@ -92,31 +92,21 @@ with open('tes.txt', 'r+') as csvfile:
 				tes[x][y]=(tes[x][y]-min[y])/(max[y]-min[y])
 				print tes[x][y]
 			print '\n'
-r=0 #baris untuk iter weight_log2 panjangnya 2
-c=0 #kolom untuk iter weight_log2 panjangnya 3
-o=0 #iter output panjangnya 2
+
 out=[[0.0 for i in range (2)] for j in range (len(tes))]
 #feed foward untuk menentukan kelas dari data tes
 for x in range (len(tes)):
 	tengah=[0.0 for i in range (3)]
 	for i in range (3):
 		for y in range(len(tes[x])-1):
+			#tengah[i]=tengah[i]+(tes[x][y]-rbf_weight[i][y])**2
 			tengah[i]=tengah[i]+tes[x][y]*rbf_weight[i][y]
-
 		#aktivasi sigmoid
+		#tengah[i]=sqrt(tengah[i])
 		tengah[i]=1/(1+exp(-tengah[i]))
-		out[x][o]=tengah[i]*v[r][c]
-		o+=1
-		r+=1
-		c+=1
-		if o==2:
-			o=0
-		if r==2:
-			r=0
-		if c==3:
-			c=0
-		print tengah[i]
-		#os.system("pause")
+	out[x][0]=tengah[0]*v[0][0]+tengah[1]*v[0][1]+tengah[2]*v[0][2]
+	out[x][1]=tengah[0]*v[1][0]+tengah[1]*v[1][1]+tengah[2]*v[1][2]
+	#os.system("pause")
 
 for x in range (len(tes)):
 	print "Data ke-"+str(x)
