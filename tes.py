@@ -28,6 +28,7 @@ max=[-100.0 for i in range (7)]
 tengah=[0.0 for i in range (3)]
 out=[[0.0 for i in range (2)] for j in range (210)]
 
+
 #load weight_log dari input ke hidden
 with open('weight_log.txt', 'r+') as csvfile:
 	read = csv.reader(csvfile, delimiter='\t')
@@ -92,6 +93,7 @@ with open('tes.txt', 'r+') as csvfile:
 				tes[x][y]=(tes[x][y]-min[y])/(max[y]-min[y])
 				print tes[x][y]
 			print '\n'
+			tes[x][7]=int(tes[x][7])
 
 out=[[0.0 for i in range (2)] for j in range (len(tes))]
 #feed foward untuk menentukan kelas dari data tes
@@ -103,11 +105,13 @@ for x in range (len(tes)):
 			tengah[i]=tengah[i]+tes[x][y]*rbf_weight[i][y]
 		#aktivasi sigmoid
 		#tengah[i]=sqrt(tengah[i])
-		tengah[i]=1/(1+exp(-tengah[i]))
+		tengah[i]=1.0/(1.0+exp(-tengah[i]))
+	
 	out[x][0]=tengah[0]*v[0][0]+tengah[1]*v[0][1]+tengah[2]*v[0][2]
 	out[x][1]=tengah[0]*v[1][0]+tengah[1]*v[1][1]+tengah[2]*v[1][2]
 	#os.system("pause")
-
+kelas=[0 for i in range(len(tes))]
+benar=0
 for x in range (len(tes)):
 	print "Data ke-"+str(x)
 	for y in range (2):
@@ -119,5 +123,25 @@ for x in range (len(tes)):
 		else:
 			out[x][y]=1
 		print out[x][y]
+
 	print '\n'			
+	if out[x][0]==0:
+		if out[x][1]==0:
+			kelas[x]=0
+		elif out [x][1]==1:
+			kelas[x]=1
+	elif out[x][0]==1:
+		if out[x][1]==0:
+			kelas[x]=2
+		elif out[x][1]==1:
+			kelas[x]=3
 	#print tengah[x]
+
+	if kelas[x]==tes[x][7]:
+		benar=benar+1
+
+hasil=0.0
+hasil=benar/float(len(tes))
+hasil=hasil*100
+print str(hasil)+"% Benar"
+os.system("pause")

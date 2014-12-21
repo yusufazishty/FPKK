@@ -4,7 +4,6 @@ from math import *
 
 input_lyr=[ 0.0 for i in range(8) ]
 weight=[]
-iter_input=0
 dist_a=0.0
 dist_b=0.0
 dist_c=0.0
@@ -14,14 +13,14 @@ lrate=0.00075#lrate
 tau=0.3
 content = [[]]
 pilihan="Saya Ganteng"
-rbf_weight=[[]]
-input_lyr2=[ 0.0 for i in range(8) ]
-gauss_a=0.0
-gauss_b=0.0
-gauss_c=0.0
-v=[[0.1,0.2],[0.3,0.4],[0.5,0.6]]
-kelas1=0
-kelas2=0
+#rbf_weight=[[]]
+#input_lyr2=[ 0.0 for i in range(8) ]
+#gauss_a=0.0
+#gauss_b=0.0
+#gauss_c=0.0
+#v=[[0.1,0.2],[0.3,0.4],[0.5,0.6]]
+#kelas1=0
+#kelas2=0
 
 
 with open('lrate.txt', 'r+') as csvfile:
@@ -52,6 +51,7 @@ for x in range(1):
 #salin dulu bobot nya dari data set yang ada
 weight=list(content)
 if os.path.isfile('weight_log.txt'):
+        print "ada"
 	with open('weight_log.txt', 'r+') as csvfile:
 		read = csv.reader(csvfile, delimiter='\t')
 		for row in read:
@@ -59,50 +59,69 @@ if os.path.isfile('weight_log.txt'):
 			for x in range(len(weight)):
 				for y in range(len(weight[x])):
 					weight[x][y] = float(weight[x][y])
+for b in range(7):
+        print weight[0][b]
+print '\n'
+for b in range(7):
+        print weight[1][b]
+print '\n'
+for b in range(7):
+        print weight[2][b]
+print '\n'
+os.system("pause")
+epoch=1
+for t in range(epoch):
+        for x in range(len(content)):
+                #print weight node 1 dan 2
+                print 'iterasi ke '+str(x)
+                #mulai lvq
+                #1 hitung euqlidian distance
+                dist_a=0.0
+                dist_b=0.0
+                dist_c=0.0
+                #input data
+                for y in range(len(content[x])):
+                        input_lyr[y]=content[x][y]
 
-for x in range(len(content)):
-	#print weight node 1 dan 2
-	print 'iterasi ke '+str(x)
-	#mulai lvq
-	#1 hitung euqlidian distance
-	dist_a=0.0
-	dist_b=0.0
-	dist_c=0.0
-	for y in range(len(content[x])):
-		input_lyr[y]=content[x][y]
-	
-	for y in range(len(content[x])-1):
-		dist_a += (input_lyr[y] - weight[0][y]) ** 2
-		dist_b += (input_lyr[y] - weight[1][y]) ** 2
-		dist_c += (input_lyr[y] - weight[2][y]) ** 2
-	dist_a=sqrt(dist_a)
-	dist_b=sqrt(dist_b)
-	dist_c=sqrt(dist_c)
-	print "Distance A "+str(dist_a)
-	print "Distance B "+str(dist_b)
-	print "Distance C "+str(dist_c)
-	print '\n'
-	#2 tentukan winner
-	winner=min(dist_a,dist_b,dist_c)
-	#update bobot
-	if winner==dist_a:
-		for b in range(7):
-			weight[0][b] = weight[0][b] + lrate * (input_lyr[b]-weight[0][b])
-	elif winner==dist_b:
-		for b in range(7):
-			weight[1][b] = weight[1][b] + lrate * (input_lyr[b]-weight[1][b])
-	elif winner==dist_c:
-		for b in range(7):
-			weight[2][b] = weight[2][b] + lrate * (input_lyr[b]-weight[2][b])
-	for b in range(7):
-		print weight[0][b]
-	print '\n'
-	for b in range(7):
-		print weight[1][b]
-	print '\n'
-	for b in range(7):
-		print weight[2][b]
-	print '\n'
+                #euclidean distance
+                for y in range(len(content[x])-1):
+                        dist_a += (input_lyr[y] - weight[0][y]) ** 2
+                        dist_b += (input_lyr[y] - weight[1][y]) ** 2
+                        dist_c += (input_lyr[y] - weight[2][y]) ** 2
+                dist_a=sqrt(dist_a)
+                dist_b=sqrt(dist_b)
+                dist_c=sqrt(dist_c)
+                print "Distance A "+str(dist_a)
+                print "Distance B "+str(dist_b)
+                print "Distance C "+str(dist_c)
+                print '\n'
+                #2 tentukan winner
+                winner=min(dist_a,dist_b,dist_c)
+                #update bobot
+                if winner==dist_a:
+                        print"Distance A Menang"
+                        for b in range(7):
+                                weight[0][b] = weight[0][b] + lrate * (input_lyr[b]-weight[0][b])
+                elif winner==dist_b:
+                        print"Distance B Menang"
+                        for b in range(7):
+                                weight[1][b] = weight[1][b] + lrate * (input_lyr[b]-weight[1][b])
+                elif winner==dist_c:
+                        print"Distance C Menang"
+                        for b in range(7):
+                                weight[2][b] = weight[2][b] + lrate * (input_lyr[b]-weight[2][b])
+                
+                for b in range(7):
+                        print weight[0][b]
+                print '\n'
+                for b in range(7):
+                        print weight[1][b]
+                print '\n'
+                for b in range(7):
+                        print weight[2][b]
+                print '\n'
+                #os.system("pause")
+#os.system("pause")
 #def save(): untuk menyimpan outrput LVQ ke file digunakan sebagai start weight pada RBFNN
 file = open("weight_log.txt", "w+")
 file.write('\n')
