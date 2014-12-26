@@ -112,6 +112,7 @@ for x in range (len(tes)):
 	#os.system("pause")
 kelas=[0 for i in range(len(tes))]
 benar=0
+file = open("hasil.txt", "w+")
 for x in range (len(tes)):
 	print "Data ke-"+str(x)
 	for y in range (2):
@@ -136,10 +137,14 @@ for x in range (len(tes)):
 		elif out[x][1]==1:
 			kelas[x]=3
 	#print tengah[x]
-
+	for y in range (8):
+                file.write(str(tes[x][y])+'\t')
+        file.write(str(out[x])+'\t')
+        file.write(str(kelas[x])+'\n')
 	if kelas[x]==tes[x][7]:
 		benar=benar+1
 
+file.close()
 hasil=0.0
 hasil=benar/float(len(tes))
 hasil=hasil*100

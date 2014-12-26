@@ -12,8 +12,8 @@ gauss_a=0.0
 gauss_b=0.0
 gauss_c=0.0
 v=[[0.1,0.2,0.3],[0.4,0.5,0.6]]
-kelas1=0
-kelas2=0
+kelas1=0.0
+kelas2=0.0
 poin=0
 
 with open('lrate.txt', 'r+') as csvfile:
@@ -52,7 +52,7 @@ if os.path.isfile('weight_log2.txt'):
 				for y in range(len(v[x])):
 					v[x][y] = float(v[x][y])
 
-epoch=10
+epoch=100
 for t in range(epoch):
         for x in range(len(content)):        
                 #input data
@@ -92,16 +92,16 @@ for t in range(epoch):
                 z2=(gauss_a*v[1][0])+(gauss_b*v[1][1])+(gauss_c*v[1][2])
                 if content[x][7]==1:
                         kelas1=0
-                        kelas2=1
-                        print "kelas 1"
-                elif content[x][7]==2:
-                        kelas1=1
                         kelas2=0
-                        print "kelas 2"
+                        print "kelas 1"+str(kelas1)+str(kelas2)
+                elif content[x][7]==2:
+                        kelas1=0
+                        kelas2=1
+                        print "kelas 2"+str(kelas1)+str(kelas2)
                 elif content[x][7]==3:
                         kelas1=1
-                        kelas2=1
-                        print "kelas 3"
+                        kelas2=0
+                        print "kelas 3"+str(kelas1)+str(kelas2)
                 v[0][0]=v[0][0]+(lrate*(kelas1-z1)*gauss_a)
                 v[0][1]=v[0][1]+(lrate*(kelas1-z1)*gauss_b)
                 v[0][2]=v[0][2]+(lrate*(kelas1-z1)*gauss_c)
@@ -109,7 +109,7 @@ for t in range(epoch):
                 v[1][1]=v[1][1]+(lrate*(kelas2-z2)*gauss_b)
                 v[1][2]=v[1][2]+(lrate*(kelas2-z2)*gauss_c)
 		
-#os.system("pause")
+os.system("pause")
 file = open("weight_log2.txt", "w+")
 file.write('\r\n')
 file.write(str(v[0][0])+'\t'+str(v[0][1])+'\t'+str(v[0][2])+'\n'+str(v[1][0])+'\t'+str(v[1][1])+'\t'+str(v[1][2]))

@@ -68,8 +68,8 @@ print '\n'
 for b in range(7):
         print weight[2][b]
 print '\n'
-os.system("pause")
-epoch=1
+#os.system("pause")
+epoch=10
 for t in range(epoch):
         for x in range(len(content)):
                 #print weight node 1 dan 2
